@@ -8,18 +8,18 @@ INSTALLED_APPS.append("example_app")
 
 DATABASES = {
     'default': {
-        'NAME': 'user_data',
+        'NAME': os.environ.get('POSTGRES_NAME'),
         'ENGINE': 'django.db.backends.postgresql',
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': 'postgres',
-        'POST': '5432',
+        'POST': os.environ.get('POSTGRES_PORT'),
     },
     'mongo_db': {
         'ENGINE': 'djongo',
         'ENFORCE_SCHEMA': True,
         'USER': os.environ.get('MONGO_USER'),
-        'NAME': 'app_data',
+        'NAME': os.environ.get('MONGO_DATABASE'),
         'CLIENT': {
             'host': 'mongo',
             'port': 27017,
@@ -41,8 +41,12 @@ DATABASES = {
 
 
 DATABASE_APPS_MAPPING = {
+    'admin': 'default',
+    'auth': 'default',
+    'contenttypes': 'default',
+    'sessions': 'default',
     'example_user': 'default',
-    'example_app': 'mongo_db'
+    'example_app': 'mongo_db',
 }
 
 DATABASE_ROUTERS = ['myproject.routing.MyDBRouter']

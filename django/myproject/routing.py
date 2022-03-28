@@ -1,32 +1,25 @@
 import random
 
-from django.db import connections
-
 from .multiple_db_settings import DATABASE_APPS_MAPPING
 
 
 class MyDBRouter:
-
     router_mappings = DATABASE_APPS_MAPPING
 
-    user_app_labels = {'auth', 'contenttypes', 'admin', 'sessions', 'example_user'}
-    app_app_labels = {'example_app'}
-
-
-    user_db = connections[router_mappings['example_user']]
-    app_db = connections[router_mappings['example_app']]
+    user_app_labels = ['auth', 'contenttypes', 'admin', 'sessions', 'example_user']
+    app_app_labels = ['example_app']
 
     def db_for_read(self, model, **hints):
 
         if model._meta.app_label in self.router_mappings:
-            return connections[self.router_mappings[model._meta.app_label]]
+            return self.router_mappings[model._meta.app_label]
         else:
             return False
 
     def db_for_write(self, model, **hints):
 
         if model._meta.app_label in self.router_mappings:
-            return connections[self.router_mappings[model._meta.app_label]]
+            return self.router_mappings[model._meta.app_label]
         else:
             return False
 
@@ -40,14 +33,17 @@ class MyDBRouter:
                 obj2._meta.app_label in self.router_mappings
         ):
             return True
+        elif (
+                obj1._meta.app_label in self.router_mappings or
+                obj2._meta.app_label in self.router_mappings
+        ):
+            return True
         else:
             print(f"no database {obj1._meta.app_label}")
             print(f"no database {obj2._meta.app_label}")
             return False
 
-
     def allow_migrate(self, db, app_label, model_name=None, **hints):
-        print(db, app_label, model_name)
         """
         All non-auth models end up in this pool.
         """
@@ -56,7 +52,7 @@ class MyDBRouter:
                 return True
             else:
                 return None
-        elif db == 'mongo_data':
+        elif db == 'mongo_db':
             if app_label in self.app_app_labels:
                 return True
             else:
