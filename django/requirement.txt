@@ -5,3 +5,6 @@ psycopg2==2.8.4
 pymongo==3.7.2
 pytz==2022.1
 sqlparse==0.2.4
+jupyterlab==3.3.2
+django-extensions==3.1.5
+# ipython==8.2.0

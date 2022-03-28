@@ -1,10 +1,13 @@
 from .settings import *
 import os
 
+import jupyterlab
+
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS.append("example_user")
 INSTALLED_APPS.append("example_app")
+INSTALLED_APPS.append("django_extensions")
 
 DATABASES = {
     'default': {
@@ -50,3 +53,14 @@ DATABASE_APPS_MAPPING = {
 }
 
 DATABASE_ROUTERS = ['myproject.routing.MyDBRouter']
+
+notebook_default_url = '/lab'  # Using JupyterLab
+
+NOTEBOOK_ARGUMENTS = [
+    '--ip', '0.0.0.0',
+    '--port', '8888',
+    '--notebook-dir', '/home/workspace/notebooks',
+    '--NotebookApp.default_url', notebook_default_url,
+    '--allow-root'
+]
+IPYTHON_KERNEL_DISPLAY_NAME = 'Django Kernel'

@@ -50,13 +50,25 @@ create-superuser-local: ## Create superuser
 ##@ Debug
 .PHONY: restart-django show-env kill-container
 restart-django: ## Restart django
-	 docker-compose run --rm django python scripts/create_collection.py
+	 docker-compose restart django
 
 show-env: ## Show env
 	cat example_env
 
 kill-container: ## Kill stop containers
 	docker rm -f $$(docker ps -a -q  --filter "status=exited")
+
+##@ Jupyerlab with Django
+.PHONY: run-jupyter-with-django
+
+kill-jupyter-django: ## Kill jupyterlab-django containers
+	docker rm -f $$(docker ps -a -q  --filter "name=jupyterlab-django")
+
+run-jupyter-with-django: ## Run jupyterlab with django kernel
+	docker-compose run -d -p 8888:8888 --name jupyterlab-django -v ./notebooks:/home/workspace/notebooks django python manage.py shell_plus --notebook --settings=myproject.multiple_db_settings
+	sleep 10
+	echo $$(docker logs --tail 3 jupyterlab-django)
+
 ##@ Help
 .PHONY: help
 help: ## Display this help
