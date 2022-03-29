@@ -9,7 +9,7 @@ different app use different database
 example:
 
 ```
-example_user for user_data
+example_user for user data
 example_app for application data
 ```
 
