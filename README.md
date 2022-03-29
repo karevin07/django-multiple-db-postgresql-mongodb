@@ -55,11 +55,9 @@ docker-compose up -d
 make migrate-all
 ```
 
-[django web](0.0.0.0:8000)
-
+django web: 0.0.0.0:8000
 
 ## Jupterlab with Django kernel
-
 
 ```mermaid
 flowchart
@@ -95,7 +93,7 @@ Jupyterlab with django kernel for develop and test
 make run-jupyter-with-django
 ```
 
-[jupyterlab](0.0.0.0:8888)
+jupyterlab: 0.0.0.0:8888
 
 ## Reference
 
