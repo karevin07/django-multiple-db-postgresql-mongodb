@@ -13,6 +13,28 @@ example_user for user_data
 example_app for application data
 ```
 
+```mermaid
+flowchart
+    django[["django"]]
+    db1[("postgres")]
+    db2[("mongodb")]
+    
+    subgraph databases
+    
+        direction TB
+        db1
+        db2
+    end
+    
+    subgraph web
+        django
+    end
+    
+    db1 <-.->|"ORM"|web
+    db2 <-.->|"ORM (Djongo)"|web
+
+```
+
 ## Start
 
 - build django image
@@ -37,6 +59,35 @@ make migrate-all
 
 
 ## Jupterlab with Django kernel
+
+
+```mermaid
+flowchart
+
+    dev("jupyterlab")
+    django[["django"]]
+    db1[("postgres")]
+    db2[("mongodb")]
+    
+    subgraph databases
+    
+        direction TB
+        db1
+        db2
+    end
+    
+    subgraph web
+        django
+    end
+    
+    db1 <-.->|"ORM"|web
+    db2 <-.->|"ORM (Djongo)"|web
+    
+    dev -.->|"Django Kernel"|web
+
+    
+
+```
 
 Jupyterlab with django kernel for develop and test
 
