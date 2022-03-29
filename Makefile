@@ -19,7 +19,10 @@ start-application: ## Start example app
 
 ##@ Django data migrate
 .PHONY: migrate-db
+
 migrate-db:| migrate-admin migrate-auth migrate-contenttypes migrate-sessions migrate-user migrate-app ## migrate all db
+
+migrate-all:| migrate-db make-migrate
 
 make-migrate: ## Make migrations
 	docker-compose run --rm django python manage.py makemigrations --settings=myproject.multiple_db_settings
@@ -49,8 +52,6 @@ create-superuser-local: ## Create superuser
 
 ##@ Debug
 .PHONY: restart-django show-env kill-container
-restart-django: ## Restart django
-	 docker-compose restart django
 
 show-env: ## Show env
 	cat example_env
@@ -59,14 +60,14 @@ kill-container: ## Kill stop containers
 	docker rm -f $$(docker ps -a -q  --filter "status=exited")
 
 ##@ Jupyerlab with Django
-.PHONY: run-jupyter-with-django
+.PHONY: run-jupyter-with-django kill-jupyter-django
 
 kill-jupyter-django: ## Kill jupyterlab-django containers
 	docker rm -f $$(docker ps -a -q  --filter "name=jupyterlab-django")
 
 run-jupyter-with-django: ## Run jupyterlab with django kernel
-	docker-compose run -d -p 8888:8888 --name jupyterlab-django -v ./notebooks:/home/workspace/notebooks django python manage.py shell_plus --notebook --settings=myproject.multiple_db_settings
-	sleep 10
+	docker-compose run -d -p 8888:8888 --name jupyterlab-django -v ./notebooks:/home/notebooks django python manage.py shell_plus --notebook --settings=myproject.multiple_db_settings
+	sleep 5
 	echo $$(docker logs --tail 3 jupyterlab-django)
 
 ##@ Help
