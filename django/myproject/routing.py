@@ -25,38 +25,29 @@ class MyDBRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         """
-        Allow relations if a model in the auth or contenttypes apps is
-        involved.
+        Allow relations if ob1 and ob2 is involved
         """
         if (
                 obj1._meta.app_label in self.router_mappings or
                 obj2._meta.app_label in self.router_mappings
         ):
             return True
-        elif (
-                obj1._meta.app_label in self.router_mappings or
-                obj2._meta.app_label in self.router_mappings
-        ):
-            return True
         else:
-            print(f"no database {obj1._meta.app_label}")
-            print(f"no database {obj2._meta.app_label}")
             return False
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         """
-        All non-auth models end up in this pool.
+        Make sure the user model appears in the default db
         """
         if db == 'default':
             if app_label in self.user_app_labels:
                 return True
             else:
-                return None
+                return False
         elif db == 'mongo_db':
             if app_label in self.app_app_labels:
                 return True
             else:
-                return None
+                return False
         else:
-            return False
-        # return None
+            return None

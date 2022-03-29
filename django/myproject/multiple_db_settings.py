@@ -54,13 +54,14 @@ DATABASE_APPS_MAPPING = {
 
 DATABASE_ROUTERS = ['myproject.routing.MyDBRouter']
 
-notebook_default_url = '/lab'  # Using JupyterLab
+notebook_default_url = '/lab'
 
 NOTEBOOK_ARGUMENTS = [
     '--ip', '0.0.0.0',
     '--port', '8888',
     '--notebook-dir', '/home/workspace/notebooks',
     '--NotebookApp.default_url', notebook_default_url,
-    '--allow-root'
+    '--allow-root',
+    '--no-browser',
 ]
 IPYTHON_KERNEL_DISPLAY_NAME = 'Django Kernel'
