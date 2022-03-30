@@ -4,7 +4,7 @@ PROJECT_NAME=myproject
 EXAMPLE_APP=example
 
 ##@ Build image
-.PHONY: build-django-imageåå
+.PHONY: build-django-image
 build-django-image: ## Build django image
 	docker build -t $(IMAGE_NAME) -f django/Dockerfile .
 
