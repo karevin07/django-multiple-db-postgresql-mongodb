@@ -12,7 +12,7 @@ INSTALLED_APPS.append("django_extensions")
 DATABASES = {
     'default': {
         'NAME': os.environ.get('POSTGRES_NAME'),
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_multiple_db.db.backends.postgresql',
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': 'postgres',

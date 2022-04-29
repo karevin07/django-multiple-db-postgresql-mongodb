@@ -130,5 +130,5 @@ dmypy.json
 
 /data/*
 
-/django/example*/migrations/*
+/django_multiple_db/example*/migrations/*
 
