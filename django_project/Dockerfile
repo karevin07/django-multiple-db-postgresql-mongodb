@@ -4,6 +4,6 @@ ARG WORKSPACE='/home/workspace'
 RUN mkdir -p ${WORKSPACE}
 WORKDIR ${WORKSPACE}
 
-COPY ./django/requirement.txt .
+COPY ./django_project/requirement.txt .
 
 RUN pip install -r requirement.txt
