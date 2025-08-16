@@ -1,5 +1,6 @@
 from .settings import *
 import os
+import django_mongodb_backend
 
 import jupyterlab
 
@@ -16,30 +17,12 @@ DATABASES = {
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': 'postgres',
-        'POST': os.environ.get('POSTGRES_PORT'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     },
-    'mongo_db': {
-        'ENGINE': 'djongo',
-        'ENFORCE_SCHEMA': True,
-        'USER': os.environ.get('MONGO_USER'),
-        'NAME': os.environ.get('MONGO_DATABASE'),
-        'CLIENT': {
-            'host': 'mongo',
-            'port': 27017,
-            'username': os.environ.get('MONGO_USER'),
-            'password': os.environ.get('MONGO_PASSWORD'),
-            'authMechanism': 'SCRAM-SHA-1'
-        },
-        'LOGGING': {
-            'version': 1,
-            'loggers': {
-                'djongo': {
-                    'level': 'DEBUG',
-                    'propagate': False,
-                }
-            },
-        },
-    }
+    'mongo_db': django_mongodb_backend.parse_uri(
+        f"mongodb://{os.environ.get('MONGO_USER')}:{os.environ.get('MONGO_PASSWORD')}@mongo:27017/{os.environ.get('MONGO_DATABASE')}?authSource=admin",
+        db_name=os.environ.get('MONGO_DATABASE')
+    ),
 }
 
 
