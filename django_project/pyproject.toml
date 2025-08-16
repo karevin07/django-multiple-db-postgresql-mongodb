@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "django-multiple-db-postgresql-mongodb"
+version = "0.1.0"
+description = "Django project with multiple databases (PostgreSQL and MongoDB)"
+authors = ["Kelvin <karevin07@gmail.com>"]
+readme = "../README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "5.2.0"
+django-environ = "0.11.2"
+django-mongodb-backend = "5.2.0b2"
+psycopg2-binary = "2.9.9"
+pymongo = ">=4.7,<5.0"
+pytz = "2023.3"
+sqlparse = "0.4.4"
+jupyterlab = "4.0.9"
+django-extensions = "3.2.3"
+dnspython = "2.4.2"
+
+[tool.poetry.group.dev.dependencies]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+start = "python manage.py runserver"
+migrate = "python manage.py migrate"
+makemigrations = "python manage.py makemigrations"
+shell = "python manage.py shell"

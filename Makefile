@@ -3,10 +3,34 @@ PROJECT_NAME=myproject
 
 EXAMPLE_APP=example
 
+##@ Poetry commands
+.PHONY: poetry-install poetry-update poetry-add poetry-remove poetry-shell
+poetry-install: ## Install dependencies with Poetry
+	cd django_project && poetry install
+
+poetry-update: ## Update dependencies with Poetry
+	cd django_project && poetry update
+
+poetry-add: ## Add a new dependency (usage: make poetry-add PACKAGE=django-debug-toolbar)
+	cd django_project && poetry add $(PACKAGE)
+
+poetry-remove: ## Remove a dependency (usage: make poetry-remove PACKAGE=django-debug-toolbar)
+	cd django_project && poetry remove $(PACKAGE)
+
+poetry-shell: ## Activate Poetry shell
+	cd django_project && poetry shell
+
 ##@ Build image
-.PHONY: build-django-image
+.PHONY: build-django-image build-django-image-no-cache docker-clean
 build-django-image: ## Build django image
 	docker build -t $(IMAGE_NAME) -f django_project/Dockerfile .
+
+build-django-image-no-cache: ## Build django image without cache
+	docker build --no-cache -t $(IMAGE_NAME) -f django_project/Dockerfile .
+
+docker-clean: ## Clean up Docker images and containers
+	docker system prune -f
+	docker image prune -f
 
 ##@ Django start project and start app
 .PHONY: start-project start-application
