@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.9"
 services:
   django:
     command: 'python manage.py runserver 0.0.0.0:8000 --settings=myproject.multiple_db_settings'
@@ -21,7 +21,7 @@ services:
       postgres:
         condition: service_healthy
   postgres:
-    image: postgres:9.6
+    image: postgres:15
     environment:
       POSTGRES_NAME: ${POSTGRES_NAME}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -38,7 +38,7 @@ services:
       timeout: 5s
       retries: 5
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -48,7 +48,7 @@ services:
       - "${PGADMIN_PORT:-5050}:80"
     restart: unless-stopped
   mongo:
-    image: mongo:4.4
+    image: mongo:7.0
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
     command: mongod
   mongo-express:
-    image: mongo-express
+    image: mongo-express:latest
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongo
       - ME_CONFIG_MONGODB_PORT=${MONGO_PORT}
