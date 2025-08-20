@@ -66,6 +66,3 @@ EXPOSE 8000
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD python manage.py check --settings=myproject.multiple_db_settings || exit 1
-
-# # Default command
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--settings=myproject.multiple_db_settings"]
