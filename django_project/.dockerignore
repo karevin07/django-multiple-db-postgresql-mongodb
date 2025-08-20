@@ -68,7 +68,6 @@ docker-compose*
 .dockerignore
 
 # Poetry
-poetry.lock
 
 # Jupyter
 .ipynb_checkpoints
