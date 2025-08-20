@@ -55,7 +55,7 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/pytho
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy project files
-COPY --chown=appuser:appuser django_project/ .
+COPY --chown=appuser:appuser ./ .
 
 # Switch to non-root user
 USER appuser
