@@ -29,7 +29,7 @@ ENV PATH="/root/.local/bin:$PATH"
 RUN poetry config virtualenvs.create false
 
 # Copy poetry files
-COPY pyproject.toml poetry.lock* ./
+COPY django_project/pyproject.toml django_project/poetry.lock* ./
 
 # Install dependencies
 RUN poetry install --only main --no-interaction --no-ansi --no-root
