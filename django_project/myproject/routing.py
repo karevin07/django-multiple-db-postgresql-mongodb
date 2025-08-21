@@ -39,15 +39,6 @@ class MyDBRouter:
         """
         Make sure the user model appears in the default db
         """
-        if db == 'default':
-            if app_label in self.user_app_labels:
-                return True
-            else:
-                return False
-        elif db == 'mongo_db':
-            if app_label in self.app_app_labels:
-                return True
-            else:
-                return False
-        else:
-            return None
+        if app_label in self.router_mappings:
+            return db == self.router_mappings[app_label]
+        return db == 'default'

@@ -19,14 +19,16 @@ DATABASES = {
         'HOST': 'postgres',
         'PORT': os.environ.get('POSTGRES_PORT'),
     },
-    'mongo_db': django_mongodb_backend.parse_uri(
-        f"mongodb://{os.environ.get('MONGO_USER')}:{os.environ.get('MONGO_PASSWORD')}@mongo:27017/{os.environ.get('MONGO_DATABASE')}?authSource=admin",
-        "mongodb://mongo:27017/",
-        db_name=os.environ.get('MONGO_DATABASE'),
-        username=os.environ.get('MONGO_USER'),
-        password=os.environ.get('MONGO_PASSWORD'),
-        f"mongodb://{os.environ.get('MONGO_USER')}:{os.environ.get('MONGO_PASSWORD')}@mongo:27017/{os.environ.get('MONGO_DATABASE')}?authSource=admin"
-    ),
+    'mongo_db': {
+        'ENGINE': 'django_mongodb_backend',
+        'NAME': os.environ.get('MONGO_DATABASE'),
+        'CLIENT': {
+            'host': f"mongodb://{os.environ.get('MONGO_USER')}:{os.environ.get('MONGO_PASSWORD')}@mongo:27017/{os.environ.get('MONGO_DATABASE')}?authSource=admin",
+            'username': os.environ.get('MONGO_USER'),
+            'password': os.environ.get('MONGO_PASSWORD'),
+            'authSource': 'admin',
+        },
+    },
 }
 
 
