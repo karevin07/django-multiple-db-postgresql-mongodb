@@ -42,7 +42,10 @@ start-application: ## Start example app
 	docker-compose run --rm django python manage.py startapp $(EXAMPLE_APP)_app
 
 ##@ Django data migrate
-.PHONY: migrate-db
+.PHONY: migrate-db create-postgres-db
+
+create-postgres-db: ## Create PostgreSQL database
+	docker-compose exec postgres psql -U user -d postgres -c "CREATE DATABASE user_data;"
 
 migrate-db:| migrate-admin migrate-auth migrate-contenttypes migrate-sessions migrate-user migrate-app ## migrate all db
 
