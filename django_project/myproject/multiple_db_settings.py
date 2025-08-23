@@ -22,12 +22,11 @@ DATABASES = {
     'mongo_db': {
         'ENGINE': 'django_mongodb_backend',
         'NAME': os.environ.get('MONGO_DATABASE'),
-        'CLIENT': {
-            'host': f"mongodb://{os.environ.get('MONGO_USER')}:{os.environ.get('MONGO_PASSWORD')}@mongo:27017/{os.environ.get('MONGO_DATABASE')}?authSource=admin",
-            'username': os.environ.get('MONGO_USER'),
-            'password': os.environ.get('MONGO_PASSWORD'),
-            'authSource': 'admin',
-        },
+        'HOST': 'mongo',
+        'PORT': 27017,
+        'USER': os.environ.get('MONGO_USER'),
+        'PASSWORD': os.environ.get('MONGO_PASSWORD'),
+        'AUTH_SOURCE': 'admin',
     },
 }
 
