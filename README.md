@@ -1,152 +1,147 @@
 # django-multiple-db-postgresql-mongodb
 
-A Django service with Postgres and MongoDB using uv for dependency management
+A Django service that uses PostgreSQL and MongoDB in the same project, managed with `uv`.
 
-- Why Multiple Database
+## Why Multiple Databases
 
-different app use different database
+This repo demonstrates a clean separation of concerns by storing different domains in different databases:
 
-example:
-
-```
-example_user for user data
-example_app for application data
-```
+- `example_user` app uses **PostgreSQL** for user data
+- `example_app` app uses **MongoDB** for application data
 
 ```mermaid
 flowchart
     django[["django"]]
     db1[("postgres")]
     db2[("mongodb")]
-    
+
     subgraph databases
-    
         direction TB
         db1
         db2
     end
-    
+
     subgraph web
         django
     end
-    
+
     db1 <-.->|"ORM"|web
     db2 <-.->|"ORM (Djongo)"|web
-
 ```
 
-## Start
+## ✨ Features
+
+- Django multi-db setup (PostgreSQL + MongoDB)
+- Separate apps mapped to separate databases
+- `uv`-based dependency management
+- Docker multi-stage build for smaller runtime images
+- Optional JupyterLab + Django kernel for rapid exploration
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-This project uses uv for dependency management. Make sure you have uv installed:
+- `uv` installed
+- Docker (optional)
 
-```shell
+Install `uv`:
+
+```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+### Environment Variables
+
+Copy and adjust the sample env file:
+
+```bash
+cp .env.example .env
+```
+
+Key variables:
+
+- `MONGO_ROOT_USER`, `MONGO_ROOT_PASSWORD`
+- `MONGO_DATABASE`, `MONGO_PORT`
+- `POSTGRES_NAME`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
+- `POSTGRES_PORT`
+- `PGADMIN_DEFAULT_EMAIL`, `PGADMIN_DEFAULT_PASSWORD`
+
 ### Local Development
 
-For local development, you can use uv directly:
-
-```shell
+```bash
 # Install dependencies
 make uv-install
 
 # Create a local virtual environment (optional)
 make uv-venv
 
-# Or run Django commands directly
+# Run the Django server
 cd django_project
 uv run python manage.py runserver --settings=myproject.multiple_db_settings
 ```
 
+Django will be available at `0.0.0.0:8000`.
+
 ### Docker Development
 
-Dockerfile 使用多階段建置（Multi-stage build）優化：
+This project uses a multi-stage Docker build:
 
-- **Builder Stage**: 安裝 uv 和專案依賴
-- **Runtime Stage**: 只保留必要的執行環境
+- **Builder stage** installs `uv` and project dependencies
+- **Runtime stage** includes only what is needed to run the app
 
-- build django image
-
-```shell
+```bash
+# Build Django image
 make build-django-image
-```
 
-- build without cache (for clean build)
-
-```shell
+# Clean build (no cache)
 make build-django-image-no-cache
-```
 
-- clean up Docker resources
+# Start services
+docker-compose up -d
 
-```shell
+# Run migrations for all databases
+make migrate-all
+
+# Cleanup Docker resources
 make docker-clean
 ```
 
-- start with docker-compose
+## 🧪 JupyterLab + Django Kernel
 
-```shell
-docker-compose up -d
-```
-
-- migrate data
-
-```shell
-make migrate-all
-```
-
-django web: 0.0.0.0:8000
-
-## Jupterlab with Django kernel
+JupyterLab can be started with a Django-aware kernel for exploration and testing:
 
 ```mermaid
 flowchart
-
     dev("jupyterlab")
     django[["django"]]
     db1[("postgres")]
     db2[("mongodb")]
-    
+
     subgraph databases
-    
         direction TB
         db1
         db2
     end
-    
+
     subgraph web
         django
     end
-    
+
     db1 <-.->|"ORM"|web
     db2 <-.->|"ORM (Djongo)"|web
-    
     dev -.->|"Django Kernel"|web
-
-    
-
 ```
 
-Jupyterlab with django kernel for develop and test
-
-```shell
+```bash
 make run-jupyter-with-django
 ```
 
-jupyterlab: 0.0.0.0:8888
+JupyterLab will be available at `0.0.0.0:8888`.
 
+## 📚 References
 
-## Reference
-
-[Djongo](https://www.djongomapper.com/get-started/)
-
-[django-multi-db](https://docs.djangoproject.com/en/4.0/topics/db/multi-db/)
-
-[Using Django project in Jupyter or JupyterLab](https://gist.github.com/EtsuNDmA/dd8949061783bf593706559374c8f635)
-
-[How to use Django in Jupyter Notebook](https://medium.com/ayuth/how-to-use-django-in-jupyter-notebook-561ea2401852)
-
-[uv Documentation](https://docs.astral.sh/uv/)
+- [Djongo](https://www.djongomapper.com/get-started/)
+- [Django multi-db docs](https://docs.djangoproject.com/en/4.0/topics/db/multi-db/)
+- [Using Django project in Jupyter or JupyterLab](https://gist.github.com/EtsuNDmA/dd8949061783bf593706559374c8f635)
+- [How to use Django in Jupyter Notebook](https://medium.com/ayuth/how-to-use-django-in-jupyter-notebook-561ea2401852)
+- [uv Documentation](https://docs.astral.sh/uv/)
