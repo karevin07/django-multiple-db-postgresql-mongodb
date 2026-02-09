@@ -3,22 +3,22 @@ PROJECT_NAME=myproject
 
 EXAMPLE_APP=example
 
-##@ Poetry commands
-.PHONY: poetry-install poetry-update poetry-add poetry-remove poetry-shell
-poetry-install: ## Install dependencies with Poetry
-	cd django_project && poetry install
+##@ uv commands
+.PHONY: uv-install uv-update uv-add uv-remove uv-venv
+uv-install: ## Install dependencies with uv
+	cd django_project && uv sync --locked --no-install-project
 
-poetry-update: ## Update dependencies with Poetry
-	cd django_project && poetry update
+uv-update: ## Update dependencies with uv
+	cd django_project && uv lock && uv sync --locked --no-install-project
 
-poetry-add: ## Add a new dependency (usage: make poetry-add PACKAGE=django-debug-toolbar)
-	cd django_project && poetry add $(PACKAGE)
+uv-add: ## Add a new dependency (usage: make uv-add PACKAGE=django-debug-toolbar)
+	cd django_project && uv add $(PACKAGE)
 
-poetry-remove: ## Remove a dependency (usage: make poetry-remove PACKAGE=django-debug-toolbar)
-	cd django_project && poetry remove $(PACKAGE)
+uv-remove: ## Remove a dependency (usage: make uv-remove PACKAGE=django-debug-toolbar)
+	cd django_project && uv remove $(PACKAGE)
 
-poetry-shell: ## Activate Poetry shell
-	cd django_project && poetry shell
+uv-venv: ## Create a local virtual environment with uv
+	cd django_project && uv venv
 
 ##@ Build image
 .PHONY: build-django-image build-django-image-no-cache docker-clean

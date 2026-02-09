@@ -1,4 +1,4 @@
-# Multi-stage build for Django project with Poetry
+# Multi-stage build for Django project with uv
 ARG VERSION=3.12
 FROM python:${VERSION}-slim as base
 
@@ -19,21 +19,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Add Poetry to PATH
+# Add uv to PATH
 ENV PATH="/root/.local/bin:$PATH"
 
-# Configure Poetry
-RUN poetry config virtualenvs.create false
-
-# Copy poetry files
+# Copy project metadata
+WORKDIR /app
 COPY pyproject.toml ./
-COPY poetry.lock ./
+COPY uv.lock ./
 
-# Install dependencies
-RUN poetry install --only main --no-interaction --no-ansi --no-root
+# Install dependencies into a local virtual environment
+RUN uv sync --locked --no-dev --no-install-project
 
 # ===== RUNTIME STAGE =====
 FROM base AS runtime
@@ -51,15 +49,17 @@ RUN useradd --create-home --shell /bin/bash appuser
 # Set working directory
 WORKDIR /home/appuser/app
 
-# Copy installed packages from builder stage
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
+# Copy virtual environment from builder stage
+COPY --from=builder /app/.venv /home/appuser/app/.venv
 
 # Copy project files
 COPY --chown=appuser:appuser ./ .
 
 # Switch to non-root user
 USER appuser
+
+# Ensure venv binaries are on PATH
+ENV PATH="/home/appuser/app/.venv/bin:$PATH"
 
 # Expose port
 EXPOSE 8000

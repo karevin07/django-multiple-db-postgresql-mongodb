@@ -4,8 +4,8 @@ services:
     command: 'python manage.py runserver 0.0.0.0:8000 --settings=myproject.multiple_db_settings'
     image: mydjango:latest
     volumes:
-      - ./django_project:/home/workspace
-      - ./django_project/notebooks:/home/workspace/notebooks
+      - ./django_project:/home/appuser/app
+      - ./django_project/notebooks:/home/appuser/app/notebooks
     ports:
       - "8000:8000"
     restart: unless-stopped

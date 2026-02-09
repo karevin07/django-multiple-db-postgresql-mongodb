@@ -1,6 +1,6 @@
 # django-multiple-db-postgresql-mongodb
 
-A Django service with Postgres and MongoDB using Poetry for dependency management
+A Django service with Postgres and MongoDB using uv for dependency management
 
 - Why Multiple Database
 
@@ -39,33 +39,33 @@ flowchart
 
 ### Prerequisites
 
-This project uses Poetry for dependency management. Make sure you have Poetry installed:
+This project uses uv for dependency management. Make sure you have uv installed:
 
 ```shell
-curl -sSL https://install.python-poetry.org | python3 -
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ### Local Development
 
-For local development, you can use Poetry directly:
+For local development, you can use uv directly:
 
 ```shell
 # Install dependencies
-make poetry-install
+make uv-install
 
-# Activate Poetry shell
-make poetry-shell
+# Create a local virtual environment (optional)
+make uv-venv
 
 # Or run Django commands directly
 cd django_project
-poetry run python manage.py runserver --settings=myproject.multiple_db_settings
+uv run python manage.py runserver --settings=myproject.multiple_db_settings
 ```
 
 ### Docker Development
 
 Dockerfile 使用多階段建置（Multi-stage build）優化：
 
-- **Builder Stage**: 安裝 Poetry 和專案依賴
+- **Builder Stage**: 安裝 uv 和專案依賴
 - **Runtime Stage**: 只保留必要的執行環境
 
 - build django image
@@ -149,4 +149,4 @@ jupyterlab: 0.0.0.0:8888
 
 [How to use Django in Jupyter Notebook](https://medium.com/ayuth/how-to-use-django-in-jupyter-notebook-561ea2401852)
 
-[Poetry Documentation](https://python-poetry.org/docs/)
+[uv Documentation](https://docs.astral.sh/uv/)
