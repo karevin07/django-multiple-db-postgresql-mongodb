@@ -3,7 +3,7 @@ name = "django-multiple-db-postgresql-mongodb"
 version = "0.1.0"
 description = "Django project with multiple databases (PostgreSQL and MongoDB)"
 readme = "../README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 authors = [
     { name = "Kelvin", email = "karevin07@gmail.com" }
 ]
@@ -14,8 +14,11 @@ dependencies = [
     "psycopg2-binary==2.9.9",
     "pymongo>=4.7,<5.0",
     "pytz==2023.3",
-    "sqlparse==0.5.0",
-    "jupyterlab==4.0.9",
+    "sqlparse==0.5.4",
+    "jupyterlab==4.4.8",
     "django-extensions==3.2.3",
-    "dnspython==2.4.2",
+    "dnspython==2.6.1",
 ]
+
+[tool.uv]
+package = false

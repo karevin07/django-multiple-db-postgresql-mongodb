@@ -4,12 +4,15 @@ PROJECT_NAME=myproject
 EXAMPLE_APP=example
 
 ##@ uv commands
-.PHONY: uv-install uv-update uv-add uv-remove uv-venv
+.PHONY: uv-install uv-update uv-lock uv-add uv-remove uv-venv uv-runserver
 uv-install: ## Install dependencies with uv
 	cd django_project && uv sync --locked --no-install-project
 
 uv-update: ## Update dependencies with uv
 	cd django_project && uv lock && uv sync --locked --no-install-project
+
+uv-lock: ## Resolve and write uv.lock
+	cd django_project && uv lock
 
 uv-add: ## Add a new dependency (usage: make uv-add PACKAGE=django-debug-toolbar)
 	cd django_project && uv add $(PACKAGE)
@@ -19,6 +22,9 @@ uv-remove: ## Remove a dependency (usage: make uv-remove PACKAGE=django-debug-to
 
 uv-venv: ## Create a local virtual environment with uv
 	cd django_project && uv venv
+
+uv-runserver: ## Run Django locally with uv
+	cd django_project && uv run python manage.py runserver --settings=myproject.multiple_db_settings
 
 ##@ Build image
 .PHONY: build-django-image build-django-image-no-cache docker-clean

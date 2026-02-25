@@ -84,14 +84,7 @@ ipython_config.py
 # pyenv
 .python-version
 
-# Poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
-# Poetry virtual environment
+# Python virtual environment
 .venv/
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
@@ -134,4 +127,3 @@ dmypy.json
 /data/*
 
 /django_project/example*/migrations/*
-

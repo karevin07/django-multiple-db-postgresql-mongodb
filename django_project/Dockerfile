@@ -27,8 +27,8 @@ ENV PATH="/root/.local/bin:$PATH"
 
 # Copy project metadata
 WORKDIR /app
-COPY pyproject.toml ./
-COPY uv.lock ./
+COPY django_project/pyproject.toml ./pyproject.toml
+COPY django_project/uv.lock ./uv.lock
 
 # Install dependencies into a local virtual environment
 RUN uv sync --locked --no-dev --no-install-project
