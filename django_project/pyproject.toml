@@ -8,7 +8,7 @@ authors = [
     { name = "Kelvin", email = "karevin07@gmail.com" }
 ]
 dependencies = [
-    "django>=6.0.3,<6.1.0",
+    "django>=6.0.4,<6.1.0",
     "django-environ==0.11.2",
     "django-mongodb-backend==6.0.2",
     "psycopg2-binary==2.9.9",
