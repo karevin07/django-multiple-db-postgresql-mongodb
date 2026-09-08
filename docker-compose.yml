@@ -1,8 +1,12 @@
-version: "3.9"
+# Local development stack only. Ports are published to the host and the
+# sample .env uses trivial credentials -- do not deploy this file as-is.
 services:
   django:
-    command: 'python manage.py runserver 0.0.0.0:8000 --settings=myproject.multiple_db_settings'
+    build:
+      context: ./django_project
+      dockerfile: Dockerfile
     image: mydjango:latest
+    command: 'python manage.py runserver 0.0.0.0:8000 --settings=myproject.multiple_db_settings'
     volumes:
       - ./django_project:/home/appuser/app
       - ./django_project/notebooks:/home/appuser/app/notebooks
@@ -23,6 +27,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      mongo:
+        condition: service_healthy
   postgres:
     image: postgres:15
     environment:
@@ -34,10 +40,10 @@ services:
     volumes:
       - postgres_data:/data/postgres
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -51,6 +57,9 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
   mongo:
     image: mongo:7.0
     environment:
@@ -58,11 +67,15 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_DATABASE}
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT:-27017}:27017"
     volumes:
       - mongo_data:/data/db
     restart: unless-stopped
-    command: mongod
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   mongo-express:
     image: mongo-express:latest
     environment:
@@ -75,7 +88,8 @@ services:
       - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
       - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     restart: unless-stopped
     ports:
       - "8081:8081"

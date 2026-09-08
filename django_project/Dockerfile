@@ -59,6 +59,6 @@ USER appuser
 # Expose port
 EXPOSE 8000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=20s --retries=3 \
-    CMD python manage.py check --settings=myproject.multiple_db_settings || exit 1
+# Health check: confirm the app is actually serving HTTP (not just importable)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD python -c "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/admin/login/', timeout=5).status < 500 else 1)"
