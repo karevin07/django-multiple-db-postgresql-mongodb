@@ -12,20 +12,22 @@ INSTALLED_APPS.append("django_extensions")
 
 DATABASES = {
     'default': {
-        'NAME': os.environ.get('POSTGRES_NAME'),
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'postgres',
-        'PORT': os.environ.get('POSTGRES_PORT'),
+        'NAME': env('POSTGRES_NAME', default=None),
+        'USER': env('POSTGRES_USER', default=None),
+        'PASSWORD': env('POSTGRES_PASSWORD', default=None),
+        # Defaults to the Docker Compose service name; override with POSTGRES_HOST
+        # (e.g. 127.0.0.1) when running Django outside Compose.
+        'HOST': env('POSTGRES_HOST', default='postgres'),
+        'PORT': env('POSTGRES_PORT', default='5432'),
     },
     'mongo_db': {
         'ENGINE': 'django_mongodb_backend',
-        'NAME': os.environ.get('MONGO_DATABASE'),
-        'HOST': 'mongo',
-        'PORT': 27017,
-        'USER': os.environ.get('MONGO_USER'),
-        'PASSWORD': os.environ.get('MONGO_PASSWORD'),
+        'NAME': env('MONGO_DATABASE', default=None),
+        'HOST': env('MONGO_HOST', default='mongo'),
+        'PORT': env.int('MONGO_PORT', default=27017),
+        'USER': env('MONGO_ROOT_USER', default=None),
+        'PASSWORD': env('MONGO_ROOT_PASSWORD', default=None),
         'AUTH_SOURCE': 'admin',
     },
 }

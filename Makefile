@@ -29,10 +29,10 @@ uv-runserver: ## Run Django locally with uv
 ##@ Build image
 .PHONY: build-django-image build-django-image-no-cache docker-clean
 build-django-image: ## Build django image
-	docker build -t $(IMAGE_NAME) -f django_project/Dockerfile .
+	docker build -t $(IMAGE_NAME) -f django_project/Dockerfile django_project
 
 build-django-image-no-cache: ## Build django image without cache
-	docker build --no-cache -t $(IMAGE_NAME) -f django_project/Dockerfile .
+	docker build --no-cache -t $(IMAGE_NAME) -f django_project/Dockerfile django_project
 
 docker-clean: ## Clean up Docker images and containers
 	docker system prune -f

@@ -12,8 +12,15 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 
+import environ
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Load environment variables from a .env file at the repository root (if it exists).
+# Under Docker Compose the variables are injected directly, so a missing file is fine.
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, os.pardir, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
