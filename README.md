@@ -29,7 +29,7 @@ flowchart
     db2 <-.->|"ORM (django-mongodb-backend)"|web
 ```
 
-## ✨ Features
+## Features
 
 - Django multi-db setup (PostgreSQL + MongoDB)
 - Separate apps mapped to separate databases
@@ -37,7 +37,7 @@ flowchart
 - Docker multi-stage build for smaller runtime images
 - Optional JupyterLab + Django kernel for rapid exploration
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -110,7 +110,7 @@ make migrate-all
 make docker-clean
 ```
 
-## 🧪 JupyterLab + Django Kernel
+## JupyterLab + Django Kernel
 
 JupyterLab can be started with a Django-aware kernel for exploration and testing:
 
@@ -142,7 +142,7 @@ make run-jupyter-with-django
 
 JupyterLab will be available at `0.0.0.0:8888`.
 
-## 📚 References
+## References
 
 - [django-mongodb-backend](https://github.com/mongodb/django-mongodb-backend)
 - [Django multi-db docs](https://docs.djangoproject.com/en/stable/topics/db/multi-db/)
