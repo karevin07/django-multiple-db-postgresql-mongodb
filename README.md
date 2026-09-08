@@ -26,7 +26,7 @@ flowchart
     end
 
     db1 <-.->|"ORM"|web
-    db2 <-.->|"ORM (Djongo)"|web
+    db2 <-.->|"ORM (django-mongodb-backend)"|web
 ```
 
 ## ✨ Features
@@ -60,11 +60,15 @@ cp .env.example .env
 
 Key variables:
 
+- `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS` (Django; `DEBUG` defaults to off)
 - `MONGO_ROOT_USER`, `MONGO_ROOT_PASSWORD`
-- `MONGO_DATABASE`, `MONGO_PORT`
+- `MONGO_DATABASE`, `MONGO_PORT`, `MONGO_HOST`
 - `POSTGRES_NAME`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
-- `POSTGRES_PORT`
+- `POSTGRES_PORT`, `POSTGRES_HOST`
 - `PGADMIN_DEFAULT_EMAIL`, `PGADMIN_DEFAULT_PASSWORD`
+
+`*_HOST` default to the Docker Compose service names; set them to `127.0.0.1`
+when running Django directly on the host.
 
 ### Local Development
 
@@ -90,7 +94,7 @@ This project uses a multi-stage Docker build:
 - **Runtime stage** includes only what is needed to run the app
 
 ```bash
-# Build Django image
+# Build the Django image (or let Compose build it: `docker compose up -d --build`)
 make build-django-image
 
 # Clean build (no cache)
@@ -128,7 +132,7 @@ flowchart
     end
 
     db1 <-.->|"ORM"|web
-    db2 <-.->|"ORM (Djongo)"|web
+    db2 <-.->|"ORM (django-mongodb-backend)"|web
     dev -.->|"Django Kernel"|web
 ```
 
@@ -140,8 +144,8 @@ JupyterLab will be available at `0.0.0.0:8888`.
 
 ## 📚 References
 
-- [Djongo](https://www.djongomapper.com/get-started/)
-- [Django multi-db docs](https://docs.djangoproject.com/en/4.0/topics/db/multi-db/)
+- [django-mongodb-backend](https://github.com/mongodb/django-mongodb-backend)
+- [Django multi-db docs](https://docs.djangoproject.com/en/stable/topics/db/multi-db/)
 - [Using Django project in Jupyter or JupyterLab](https://gist.github.com/EtsuNDmA/dd8949061783bf593706559374c8f635)
 - [How to use Django in Jupyter Notebook](https://medium.com/ayuth/how-to-use-django-in-jupyter-notebook-561ea2401852)
 - [uv Documentation](https://docs.astral.sh/uv/)

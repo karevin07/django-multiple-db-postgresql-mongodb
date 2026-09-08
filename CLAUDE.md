@@ -73,14 +73,19 @@ make create-superuser-local
 
 ```shell
 # Install dependencies
-make uv-sync
+make uv-install
 
-# Run Django server locally
+# Run Django server locally (reads ../.env; set POSTGRES_HOST / MONGO_HOST
+# to point at your local services, see .env.example)
 cd django_project
 uv run python manage.py runserver --settings=myproject.multiple_db_settings
 ```
 
 ### Migrations
+
+Initial migrations for `example_user` and `example_app` are committed. Only run
+`makemigrations` after changing a model; `makemigrations` needs both databases
+reachable because it checks migration history on each.
 
 **IMPORTANT**: Migrations must be run per-database with explicit `--database` flag:
 
@@ -116,11 +121,17 @@ make run-jupyter-with-django
 
 ## Environment Variables
 
-Environment variables are loaded from `.env` file (see `example_env` for template):
-- PostgreSQL: `POSTGRES_NAME`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT`
-- MongoDB: `MONGO_DATABASE`, `MONGO_ROOT_USER`, `MONGO_ROOT_PASSWORD`, `MONGO_PORT`
+Environment variables are loaded from a repo-root `.env` file (see `.env.example`
+for a template); `django-environ` reads it in `settings.py`, and Docker Compose
+also injects them into the containers:
+- Django: `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`
+- PostgreSQL: `POSTGRES_NAME`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT`, `POSTGRES_HOST`
+- MongoDB: `MONGO_DATABASE`, `MONGO_ROOT_USER`, `MONGO_ROOT_PASSWORD`, `MONGO_PORT`, `MONGO_HOST`
 - pgAdmin: `PGADMIN_DEFAULT_EMAIL`, `PGADMIN_DEFAULT_PASSWORD`
 - mongo-express: `MONGOEXPRESS_LOGIN`, `MONGOEXPRESS_PASSWORD`
+
+`POSTGRES_HOST` / `MONGO_HOST` default to the Compose service names (`postgres` /
+`mongo`); override them (e.g. `127.0.0.1`) to run Django outside Compose.
 
 ## Project Structure
 
@@ -146,16 +157,17 @@ When creating apps that should use MongoDB:
 
 1. Add app to `INSTALLED_APPS` in `multiple_db_settings.py`
 2. Add mapping to `DATABASE_APPS_MAPPING` in `multiple_db_settings.py`
-3. Update `MyDBRouter` label lists in `routing.py` if needed
-4. Use `ObjectIdAutoField` for model primary keys
-5. Set `app_label` explicitly in model Meta class
-6. Run migrations with `--database=mongo_db` flag
+   (`MyDBRouter` reads this dict directly - no router code change needed;
+   apps not listed fall back to `default`)
+3. Use `ObjectIdAutoField` for model primary keys
+4. Set `app_label` explicitly in model Meta class
+5. Run migrations with `--database=mongo_db` flag
 
 ## Dependencies
 
 Key packages:
-- `django-mongodb-backend` - MongoDB backend for Django ORM
-- `djongo` - Allows using Django ORM with MongoDB
+- `django-mongodb-backend` - MongoDB backend for Django ORM (the `mongo_db` ENGINE)
 - `psycopg2-binary` - PostgreSQL adapter
+- `django-environ` - Loads `.env` and casts env vars in settings
 - `django-extensions` - Provides `shell_plus` for JupyterLab integration
 - `jupyterlab` - For interactive development
