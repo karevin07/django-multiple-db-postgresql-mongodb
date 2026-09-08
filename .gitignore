@@ -125,5 +125,3 @@ dmypy.json
 .pyre/
 
 /data/*
-
-/django_project/example*/migrations/*
