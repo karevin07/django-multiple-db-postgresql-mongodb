@@ -4,7 +4,9 @@ import django_mongodb_backend
 
 import jupyterlab
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS / DEBUG / SECRET_KEY are inherited from settings.py and are
+# driven by the environment. Set ALLOWED_HOSTS=* in .env only for throwaway
+# local containers, never for anything reachable from a network.
 
 INSTALLED_APPS.append("example_user")
 INSTALLED_APPS.append("example_app")
