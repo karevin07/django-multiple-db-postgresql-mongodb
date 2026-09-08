@@ -116,8 +116,8 @@ make run-jupyter-with-django
 
 - Django: http://0.0.0.0:8000
 - JupyterLab: http://0.0.0.0:8888
-- pgAdmin: http://0.0.0.0:5050
-- mongo-express: http://0.0.0.0:8081
+- pgAdmin: http://127.0.0.1:5050 (bound to loopback)
+- mongo-express: http://127.0.0.1:8081 (bound to loopback)
 
 ## Environment Variables
 
