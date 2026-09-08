@@ -1,16 +1,14 @@
-from .settings import *
-import os
-import django_mongodb_backend
+from .settings import *  # noqa: F401,F403
 
-import jupyterlab
+# Importing the package registers django-mongodb-backend's custom ORM
+# lookups/expressions/fields; it must happen while settings load.
+import django_mongodb_backend  # noqa: F401
 
 # ALLOWED_HOSTS / DEBUG / SECRET_KEY are inherited from settings.py and are
 # driven by the environment. Set ALLOWED_HOSTS=* in .env only for throwaway
 # local containers, never for anything reachable from a network.
 
-INSTALLED_APPS.append("example_user")
-INSTALLED_APPS.append("example_app")
-INSTALLED_APPS.append("django_extensions")
+INSTALLED_APPS = [*INSTALLED_APPS, "example_user", "example_app", "django_extensions"]
 
 DATABASES = {
     'default': {

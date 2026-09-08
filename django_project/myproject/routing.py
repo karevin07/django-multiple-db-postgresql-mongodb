@@ -1,44 +1,29 @@
-import random
-
-from .multiple_db_settings import DATABASE_APPS_MAPPING
+from django.conf import settings
 
 
 class MyDBRouter:
-    router_mappings = DATABASE_APPS_MAPPING
+    """Route each app's models to the database named in ``DATABASE_APPS_MAPPING``.
 
-    user_app_labels = ['auth', 'contenttypes', 'admin', 'sessions', 'example_user']
-    app_app_labels = ['example_app']
+    Apps that are not listed fall back to the ``default`` database.
+    """
+
+    @property
+    def _mapping(self):
+        return settings.DATABASE_APPS_MAPPING
+
+    def _db_for(self, app_label):
+        return self._mapping.get(app_label, 'default')
 
     def db_for_read(self, model, **hints):
-
-        if model._meta.app_label in self.router_mappings:
-            return self.router_mappings[model._meta.app_label]
-        else:
-            return False
+        return self._mapping.get(model._meta.app_label)
 
     def db_for_write(self, model, **hints):
-
-        if model._meta.app_label in self.router_mappings:
-            return self.router_mappings[model._meta.app_label]
-        else:
-            return False
+        return self._mapping.get(model._meta.app_label)
 
     def allow_relation(self, obj1, obj2, **hints):
-        """
-        Allow relations if ob1 and ob2 is involved
-        """
-        if (
-                obj1._meta.app_label in self.router_mappings or
-                obj2._meta.app_label in self.router_mappings
-        ):
-            return True
-        else:
-            return False
+        """Allow a relation only when both objects live in the same database."""
+        return self._db_for(obj1._meta.app_label) == self._db_for(obj2._meta.app_label)
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
-        """
-        Make sure the user model appears in the default db
-        """
-        if app_label in self.router_mappings:
-            return db == self.router_mappings[app_label]
-        return db == 'default'
+        """Only migrate an app into the database it is mapped to."""
+        return db == self._db_for(app_label)
