@@ -48,10 +48,9 @@ start-application: ## Start example app
 	docker-compose run --rm django python manage.py startapp $(EXAMPLE_APP)_app
 
 ##@ Django data migrate
-.PHONY: migrate-db create-postgres-db
+.PHONY: migrate-db
 
-create-postgres-db: ## Create PostgreSQL database
-	docker-compose exec postgres psql -U user -d postgres -c "CREATE DATABASE user_data;"
+# The database itself is created by the postgres image from POSTGRES_DB.
 
 migrate-db:| migrate-admin migrate-auth migrate-contenttypes migrate-sessions migrate-user migrate-app ## migrate all db
 
@@ -86,20 +85,20 @@ create-superuser-local: ## Create superuser
 ##@ Debug
 .PHONY: restart-django show-env kill-container
 
-show-env: ## Show env
-	cat example_env
+show-env: ## Show env template
+	cat .env.example
 
 kill-container: ## Kill stop containers
 	docker rm -f $$(docker ps -a -q  --filter "status=exited")
 
-##@ Jupyerlab with Django
+##@ JupyterLab with Django
 .PHONY: run-jupyter-with-django kill-jupyter-django
 
 kill-jupyter-django: ## Kill jupyterlab-django containers
 	docker rm -f $$(docker ps -a -q  --filter "name=jupyterlab-django")
 
 run-jupyter-with-django: ## Run jupyterlab with django kernel
-	docker-compose run -d -p 8888:8888 --name jupyterlab-django -v ./notebooks:/home/notebooks django python manage.py shell_plus --notebook --settings=myproject.multiple_db_settings
+	docker-compose run -d -p 8888:8888 --name jupyterlab-django -v ./django_project/notebooks:/home/appuser/app/notebooks django python manage.py shell_plus --notebook --settings=myproject.multiple_db_settings
 	sleep 5
 	echo $$(docker logs --tail 3 jupyterlab-django)
 

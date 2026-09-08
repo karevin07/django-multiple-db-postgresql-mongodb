@@ -49,7 +49,7 @@ notebook_default_url = '/lab'
 NOTEBOOK_ARGUMENTS = [
     '--ip', '0.0.0.0',
     '--port', '8888',
-    '--notebook-dir', '/home/workspace/notebooks',
+    '--notebook-dir', '/home/appuser/app/notebooks',
     '--NotebookApp.default_url', notebook_default_url,
     '--allow-root',
     '--no-browser',
