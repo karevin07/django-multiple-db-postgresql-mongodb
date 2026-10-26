@@ -12,12 +12,12 @@ dependencies = [
     "django-environ==0.11.2",
     "django-mongodb-backend==6.0.2",
     "psycopg2-binary==2.9.9",
-    "pymongo>=4.7,<5.0",
+    "pymongo>=4.18.2,<5.0",
     "pytz==2023.3",
     "sqlparse>=0.6.0",
-    "jupyterlab>=4.6.3",
+    "jupyterlab>=4.6.4",
     "django-extensions==3.2.3",
-    "dnspython==2.6.1",
+    "dnspython>=2.7.0",
 ]
 
 [tool.uv]
